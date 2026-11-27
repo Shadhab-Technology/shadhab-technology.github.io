@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>JobTrack by Shadhab Technology</title>
-<meta name="description" content="JobTrack is an Android app for tailoring and alteration workshops: customers, jobs, garments and alterations with status tracking, working offline on the counter device.">
+<meta name="description" content="JobTrack is an Android app for drop-off and collect counters: tailors, alterations, dry cleaners and repair shops. Take items in, track each job, hand them back, offline on the counter device.">
 <meta name="color-scheme" content="dark light">
 <style>
 :root{
   --bg:#0d0c0a; --raise:rgba(255,255,255,.04); --ink:#f2ede3; --muted:#b0a898;
-  --accent:#e0b04f; --on-accent:#1a1305; --line:rgba(255,255,255,.1); --glow:rgba(224,176,79,.16);
+  --accent:#f0a48c; --on-accent:#2a0f07; --line:rgba(255,255,255,.1); --glow:rgba(240,164,140,.16);
   --e:cubic-bezier(.22,1,.36,1);
   --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --serif:ui-serif,Georgia,"Times New Roman",serif;
@@ -17,10 +17,19 @@
 }
 @media (prefers-color-scheme:light){:root{
   --bg:#f7f4ec; --raise:rgba(0,0,0,.035); --ink:#1b1914; --muted:#5a5447;
-  --accent:#7a5200; --on-accent:#fffaf0; --line:rgba(0,0,0,.14); --glow:rgba(184,134,30,.18);
+  --accent:#a13e26; --on-accent:#fff; --line:rgba(0,0,0,.14); --glow:rgba(161,62,38,.14);
 }}
+/* One colour per section, chosen for mood: terracotta (default above) = warmth/craft (hero, contact),
+   indigo = control/trust (journey, benefits), sage = settled/paid (receipts, cost chart), violet = premium (install). */
+.journey,[aria-labelledby=benefits]{--accent:#9aa8ff;--on-accent:#0b0d24;--glow:rgba(154,168,255,.16)}
+.print,[aria-labelledby=cost]{--accent:#9fd3b0;--on-accent:#0a1a10;--glow:rgba(159,211,176,.16)}
+[aria-labelledby=install]{--accent:#b9a2ff;--on-accent:#160a2e;--glow:rgba(185,162,255,.16)}
+@media (prefers-color-scheme:light){
+  .journey,[aria-labelledby=benefits]{--accent:#3a45b5;--on-accent:#fff;--glow:rgba(58,69,181,.14)}
+  .print,[aria-labelledby=cost]{--accent:#2e6a45;--on-accent:#fff;--glow:rgba(46,106,69,.14)}
+  [aria-labelledby=install]{--accent:#5b3cc4;--on-accent:#fff;--glow:rgba(91,60,196,.14)}
+}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 html,body{margin:0;overflow-x:clip}
 body{background:var(--bg);color:var(--ink);font:1rem/1.6 var(--sans)}
 .wrap{max-width:68rem;margin:0 auto;padding:0 16px}
@@ -37,30 +46,61 @@ p{margin:0 0 1rem}
 .lede{font-size:1.125rem;color:var(--muted);max-width:34rem}
 header .wrap{display:flex;align-items:center;min-height:64px;font-weight:700}
 header span{color:var(--muted);font-weight:400;margin-left:.5ch}
-.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.5rem}
+.btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:1.5rem}
 .btn{display:inline-flex;align-items:center;min-height:48px;padding:0 1.5rem;border-radius:999px;font-weight:600;text-decoration:none;background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .btn:active{transform:scale(.98)}
 @media (hover:hover) and (pointer:fine){.btn:hover{filter:brightness(1.1)}.btn.ghost:hover{border-color:var(--accent)}.card:hover{border-color:var(--accent)}}
-.hero{position:relative;display:grid;gap:3rem;padding:3rem 0 5rem;align-items:center}
 .glow{position:absolute;inset:-10% -20% auto;height:70%;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none;z-index:-1}
-@media (min-width:800px){.hero{grid-template-columns:1.2fr .8fr;padding:5rem 0 7rem}}
-.phone{justify-self:center;width:min(260px,70vw);aspect-ratio:9/18;border:1px solid var(--line);border-radius:36px;padding:14px;background:var(--raise);box-shadow:0 0 0 6px var(--bg),0 0 0 7px var(--line)}
-.screen{height:100%;border-radius:24px;background:var(--bg);border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+
+/* scenes: static flow by default (no JS, reduced motion) */
+section.scene{padding:0;border:0}
+.stage{position:relative;isolation:isolate;max-width:68rem;margin:0 auto;padding:4rem 16px;display:flex;flex-direction:column;align-items:center;gap:2rem;text-align:center}
+.lede{margin-left:auto;margin-right:auto}
+.copy{display:contents}
+.label{order:-1}.lede,.btns{order:1}.phone{order:2}
+.phone{width:min(240px,62vw);aspect-ratio:9/18;border:1px solid var(--line);border-radius:36px;padding:14px;background:var(--raise);box-shadow:0 0 0 6px var(--bg),0 0 0 7px var(--line)}
+.screen{height:100%;border-radius:24px;background:var(--bg);border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;text-align:left}
 .bar{height:10px;border-radius:5px;background:var(--line)}
 .bar.t{width:45%;height:14px;background:var(--ink);opacity:.8}
 .bar.s{height:30px;border-radius:15px}
 .row{display:flex;flex-direction:column;gap:7px;padding:10px;border:1px solid var(--line);border-radius:12px}
 .row i{display:block;height:8px;border-radius:4px;background:var(--line)}
-.row b{align-self:flex-start;font:600 .6rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:3px 7px}
+.row b,.st b{align-self:flex-start;font:600 .6rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:3px 7px}
+.st{display:flex;flex-wrap:wrap;gap:4px}
+.pg{height:6px;border-radius:3px;background:var(--line);overflow:clip}
+.fill{height:100%;background:var(--accent);transform-origin:left;transform:scaleX(var(--t,1))}
+.caps{display:grid;gap:1.5rem}
+.cap h2{font-size:clamp(1.6rem,6vw,2.4rem);margin-bottom:.5rem}
+.cap p{color:var(--muted);margin:0}
+.printer{position:relative;z-index:1;width:min(300px,80vw);height:22px;border-radius:11px;border:1px solid var(--line);background:linear-gradient(var(--raise),var(--raise)),var(--bg)}
+.printer::after{content:"";position:absolute;left:12px;right:12px;top:50%;height:4px;margin-top:-2px;border-radius:2px;background:var(--ink);opacity:.5}
+.out{width:min(220px,58vw);margin-top:-11px;overflow:clip}
+.rc{background:var(--ink);padding:26px 14px 16px;display:flex;flex-direction:column;gap:10px;border-radius:0 0 6px 6px}
+.rc i{display:block;height:8px;border-radius:4px;background:var(--bg);opacity:.75}
+.tot{display:flex;justify-content:space-between;gap:12px;padding-top:10px;border-top:2px dashed var(--bg)}
+.tot i:last-child{width:35%;height:12px;opacity:1}
+.qr{align-self:center;width:68px;aspect-ratio:1;border:4px solid var(--bg);background:conic-gradient(var(--bg) 25%,transparent 0 50%,var(--bg) 0 75%,transparent 0) 0 0/33.3% 33.3%,conic-gradient(transparent 25%,var(--bg) 0 50%,transparent 0 75%,var(--bg) 0) 0 0/20% 20%}
+.pc{max-width:30rem}.pc p{color:var(--muted)}
+
 section{padding:5rem 0;border-top:1px solid var(--line)}
 .grid{display:grid;gap:16px;grid-template-columns:1fr;margin-top:2.5rem}
 @media (min-width:640px){.grid{grid-template-columns:1fr 1fr}}
-@media (min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
 .card{padding:1.5rem;border:1px solid var(--line);border-radius:16px;background:var(--raise)}
 .card h3{font-size:1.15rem;letter-spacing:-.01em;margin:.75rem 0 .5rem}
 .card p{color:var(--muted);margin:0}
 .n{font:600 .8rem/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:.15em}
+.g3{margin-top:2.5rem}@media (min-width:800px){.g3{grid-template-columns:repeat(3,1fr)}}
+.big{font:700 clamp(2.2rem,8vw,3rem)/1 var(--sans);letter-spacing:-.03em;color:var(--accent);margin:0 0 .5rem}
+.src{font-size:.8rem;margin-top:.75rem!important}.src a{display:inline-block;padding:.7rem 0}
+.chart{width:100%;max-width:40rem;height:auto;display:block;margin:2rem 0 1rem;font:12px var(--sans)}
+.chart text{fill:var(--muted)}.chart .v{fill:var(--ink);font-weight:700}.chart .gl{stroke:var(--line)}
+.chart .b{fill:var(--muted);fill-opacity:.35}.chart .hi{fill:var(--accent)}
+.meth{font-size:.8rem;color:var(--muted);max-width:40rem}.meth a{display:inline-block;padding:.7rem 0}
+.ben{list-style:none;margin:2.5rem 0 0;padding:0;display:grid;gap:16px;color:var(--muted)}
+@media (min-width:800px){.ben{grid-template-columns:1fr 1fr;gap:20px 4rem}}
+.ben li{position:relative;padding-left:1.5rem}.ben li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.ben b{color:var(--ink)}
 .install{display:grid;gap:2rem}
 @media (min-width:800px){.install{grid-template-columns:1fr 1.2fr;gap:4rem}.install>div:first-child{position:sticky;top:6rem;align-self:start}}
 .steps{position:relative;list-style:none;margin:0;padding:0 0 0 2.5rem;counter-reset:s}
@@ -76,22 +116,53 @@ section{padding:5rem 0;border-top:1px solid var(--line)}
 footer{border-top:1px solid var(--line);padding:1.5rem 0;font:.75rem/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
 @media (prefers-reduced-motion:no-preference){
-  @keyframes settle{from{opacity:0;transform:translateY(24px);filter:blur(6px)}}
-  @keyframes drift{to{transform:translateY(24px)}}
-  .hero .label,.hero h1,.hero .lede,.hero .btns{animation:settle .8s var(--e) backwards}
-  .hero h1{animation-delay:80ms}.hero .lede{animation-delay:160ms}.hero .btns{animation-delay:240ms}
-  .glow{animation:drift 10s ease-in-out infinite alternate}
+  html{scroll-behavior:smooth}
   .btn{transition:transform .15s var(--e),filter .2s,border-color .2s}
   .card{transition:border-color .2s}
   @supports (animation-timeline:view()){
     @keyframes rise{from{opacity:0;transform:translateY(20px)}}
-    @keyframes grow{from{transform:scale(.92)}}
     @keyframes line{from{transform:scaleY(0)}}
-    .card,.steps li,.contact>:not(.glow){animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 30%}
-    .card:nth-child(3n+2){animation-range:entry 5% entry 35%}
-    .card:nth-child(3n){animation-range:entry 10% entry 40%}
-    .phone{animation:grow linear both;animation-timeline:scroll();animation-range:0 60vh}
+    .card,.ben li,.steps li,.contact>:not(.glow){animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 30%}
+    .card:nth-child(2n){animation-range:entry 5% entry 35%}
     .steps::before{animation:line linear both;animation-timeline:view();animation-range:entry 30% cover 70%}
+  }
+
+  /* scrubbed scenes: html.s is added by the script. --p = scene progress 0..1; --t = sub-range 0..1 */
+  .s .scene{height:var(--L)}
+  .s .hero{--L:240svh;--sh:16svh}.s .journey{--L:260svh}.s .print{--L:230svh}
+  .s .stage{position:sticky;top:0;height:100svh;overflow:clip;padding:0 16px;gap:0;justify-content:center}
+  .s :is(.hd,.hp,.copy,.fill,.rc,.pc){--t:clamp(0,(var(--p) - var(--s))/var(--d),1)}
+  .s :is(.hd,.phone,.copy,.rc,.cap,.st b){will-change:transform,opacity}
+  /* hero: headline p0-.4, phone p.2-.6, copy p.7-.95 */
+  .s .hd{--s:0;--d:.4;position:absolute;inset:0;display:grid;place-content:center;padding:0 16px;opacity:calc(1 - var(--t));transform:translateY(calc(var(--t)*-9svh)) scale(calc(1 - var(--t)*.15))}
+  .s .hero .phone{--s:.2;--d:.4;--u:calc(1 - (1 - var(--t))*(1 - var(--t)));position:absolute;left:50%;top:50%;width:min(240px,62vw,26svh);transform:translate(-50%,calc(-50% + (1 - var(--u))*80svh - var(--u)*var(--sh)))}
+  .s .copy{--s:.7;--d:.25;display:block;position:absolute;left:0;right:0;bottom:0;padding:2.5rem 16px 3svh;background:linear-gradient(transparent,var(--bg) 25%);opacity:var(--t);transform:translateY(calc((1 - var(--t))*24px))}
+  .s .copy .lede{font-size:.95rem;line-height:1.4;margin-bottom:0}.s .btns{margin-top:1rem}
+  /* journey: chip steps at .22/.47/.72, captions at .30/.63, progress p.05-.95 */
+  .s .jp{width:min(220px,60vw,27svh)}
+  .s .caps{height:24svh;width:100%;max-width:26rem;align-content:center;margin-bottom:3svh;gap:0}
+  .s .st{display:grid}
+  .s .st b{justify-self:start}
+  .s :is(.caps>*,.st>*){grid-area:1/1;--o:min(clamp(0,(var(--p) - var(--s))/.06,1),calc(1 - clamp(0,(var(--p) - var(--e))/.06,1)));opacity:var(--o)}
+  .s .cap{transform:translateY(calc((1 - var(--o))*14px))}
+  .s .caps>:nth-child(1){--s:-1;--e:.3}.s .caps>:nth-child(2){--s:.3;--e:.63}.s .caps>:nth-child(3){--s:.63;--e:2}
+  .s .st>:nth-child(1){--s:-1;--e:.22}.s .st>:nth-child(2){--s:.22;--e:.47}.s .st>:nth-child(3){--s:.47;--e:.72}.s .st>:nth-child(4){--s:.72;--e:2}
+  .s .fill{--s:.05;--d:.9}
+  /* receipt: prints top-first p.08-.7 (clip reveal under the slot), caption p0-.2 */
+  .s .print .stage{justify-content:flex-start;padding-top:9svh}
+  .s .out{height:44svh}
+  .s .rc{--s:.08;--d:.62;height:100%;justify-content:space-between;clip-path:inset(0 0 calc((1 - var(--t))*100%) 0)}
+  .s .pc{--s:0;--d:.2;margin-top:3svh;opacity:var(--t);transform:translateY(calc((1 - var(--t))*14px))}
+  .s .pc h2{font-size:clamp(1.6rem,5vw,2.6rem)}
+  @media (min-width:800px){
+    .s .hero{--L:300svh}.s .journey{--L:380svh}.s .print{--L:300svh}
+    .s .journey .stage{flex-direction:row;justify-content:center;gap:5rem}
+    .s .caps{width:24rem;text-align:left;margin:0}
+  }
+  @media (min-width:1000px){
+    .s .hero{--sh:0svh}
+    .s .copy{left:16px;right:auto;top:50%;bottom:auto;width:20rem;padding:0;background:none;text-align:left;transform:translateY(calc(-50% + (1 - var(--t))*24px))}
+    .s .copy .lede{margin-left:0}.s .btns{justify-content:flex-start}
   }
 }
 </style>
@@ -100,37 +171,105 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;font:.75rem/1.6 var(--m
 <a class="skip" href="#main">Skip to content</a>
 <header><div class="wrap">JobTrack <span>by Shadhab Technology</span></div></header>
 <main id="main">
-<div class="wrap">
-<div class="hero">
+
+<div class="scene hero">
+<div class="stage">
 <div class="glow" aria-hidden="true"></div>
-<div>
-<p class="label">Android app for tailors</p>
-<h1>Every alteration job, in <em>one</em> place.</h1>
-<p class="lede">JobTrack is an Android app for tailoring and alteration workshops. Record the customer, the job, the garments and the work agreed, then follow each job through to collection. It runs on a SUNMI V2 counter device or any Android 7+ phone or tablet.</p>
-<div class="btns">
-<a class="btn" href="https://github.com/rajuyasin420/jobtrack-releases/releases/latest">Download for Android</a>
-<a class="btn ghost" href="#does">See features</a>
-</div>
-</div>
-<div class="phone" aria-hidden="true"><div class="screen">
+<div class="hd"><h1>Every job ticket, in <em>one</em> place.</h1></div>
+<div class="phone hp" aria-hidden="true"><div class="screen">
 <div class="bar t"></div><div class="bar s"></div>
 <div class="row"><i style="width:60%"></i><i style="width:40%"></i><b>Received</b></div>
 <div class="row"><i style="width:50%"></i><i style="width:70%"></i><b>In progress</b></div>
 <div class="row"><i style="width:65%"></i><i style="width:35%"></i><b>Ready</b></div>
 </div></div>
+<div class="copy">
+<p class="label">For drop-off and collect counters</p>
+<p class="lede">JobTrack is an Android app for counters that take items in and hand them back. Built first for tailoring and alterations; the same take-in, track, hand-back flow fits dry cleaners and repair counters. Item fields are tailored to garments today. Runs on a SUNMI V2 or any Android 7+ phone or tablet.</p>
+<div class="btns">
+<a class="btn" href="https://github.com/rajuyasin420/jobtrack-releases/releases/latest">Download for Android</a>
+<a class="btn ghost" href="#benefits">See features</a>
+</div>
+</div>
+</div>
 </div>
 
-<section aria-labelledby="does">
-<p class="label">Features</p>
-<h2 id="does">What it does</h2>
-<div class="grid">
-<div class="card"><span class="n">01</span><h3>Customers, jobs, garments and alterations</h3><p>Each job has a reference and a due date, with its garments and alteration instructions together.</p></div>
-<div class="card"><span class="n">02</span><h3>Status tracking</h3><p>Move jobs from received, to in progress, to ready, to collected, so you can see what needs doing and what is waiting.</p></div>
-<div class="card"><span class="n">03</span><h3>Prices and receipts</h3><p>Record the price and amount paid in pounds, and print an itemised receipt on the SUNMI's built-in printer with a QR code that opens the order.</p></div>
-<div class="card"><span class="n">04</span><h3>Quick search</h3><p>Find a job by customer name, phone or job reference.</p></div>
-<div class="card"><span class="n">05</span><h3>Works offline</h3><p>The core workflow needs no live internet connection, and the data on the device is encrypted.</p></div>
-<div class="card"><span class="n">06</span><h3>Encrypted backups</h3><p>Save a password-protected backup off the device and restore it when you need to. Backups are exported by you; they are not sent offsite automatically.</p></div>
+<div class="wrap">
+<section aria-labelledby="problem">
+<p class="label">The problem</p>
+<h2 id="problem">Paper counters leak time</h2>
+<div class="grid g3">
+<div class="card"><p class="big">11 hours a week</p><p>UK small-business owners' own estimate of time spent on admin and finance.</p><p class="src">American Express SME Business Barometer, 2026, 1,000 UK business owners. <a href="https://retailtimes.co.uk/amex-sme-barometer-small-business-owners-spend-nearly-twice-the-time-on-admin-than-growing-their-business/" rel="noopener">Source</a></p></div>
+<div class="card"><p class="big">1.5 hours a week</p><p>Time UK workers lose looking for misplaced documents and information.</p><p class="src">EDM Group / Consumer Intelligence, 2013, 1,932 people. <a href="https://www.onrec.com/node/107327" rel="noopener">Source</a></p></div>
+<div class="card"><p class="big">63%</p><p>UK consumers who have stopped doing business with a brand after poor service.</p><p class="src">Microsoft Dynamics, 2015, 1,000 consumers. <a href="https://www.microsoft.com/en-us/dynamics-365/blog/?p=1571" rel="noopener">Source</a></p></div>
 </div>
+</section>
+</div>
+
+<section class="scene journey" aria-label="A job's journey">
+<div class="stage">
+<div class="caps">
+<div class="cap"><h2>Status tracking</h2><p>Move jobs from received, to in progress, to ready, to collected, so you can see what needs doing and what is waiting.</p></div>
+<div class="cap"><h2>Quick search</h2><p>Find a job by customer name, phone or job reference.</p></div>
+<div class="cap"><h2>Works offline</h2><p>The core workflow needs no live internet connection, and the data on the device is encrypted.</p></div>
+</div>
+<div class="phone jp" aria-hidden="true"><div class="screen">
+<div class="bar t"></div><div class="bar s"></div>
+<div class="row"><i style="width:60%"></i><i style="width:40%"></i>
+<div class="st"><b>Received</b><b>In progress</b><b>Ready</b><b>Collected</b></div>
+<div class="pg"><div class="fill"></div></div></div>
+</div></div>
+</div>
+</section>
+
+<section class="scene print" aria-labelledby="receipts">
+<div class="stage">
+<div class="printer" aria-hidden="true"></div>
+<div class="out" aria-hidden="true"><div class="rc">
+<i style="width:45%"></i><i style="width:90%"></i><i style="width:75%"></i><i style="width:85%"></i><i style="width:60%"></i>
+<div class="tot"><i style="width:30%"></i><i></i></div>
+<div class="qr"></div>
+</div></div>
+<div class="pc">
+<h2 id="receipts">Prices and receipts</h2>
+<p>Record the price and amount paid in pounds, and print an itemised receipt on the SUNMI's built-in printer with a QR code that opens the order.</p>
+</div>
+</div>
+</section>
+
+<div class="wrap">
+<section aria-labelledby="cost">
+<p class="label">The cost</p>
+<h2 id="cost">What paper costs a year</h2>
+<svg class="chart" viewBox="0 0 340 176" role="img" aria-label="Estimated yearly cost: admin and finance time £7,270; looking for misplaced paperwork £991; if JobTrack saves you just 1 hour a week £661.">
+<g aria-hidden="true">
+<path class="gl" d="M8 18V152M97 18V152M186 18V152M275 18V152"/>
+<text x="8" y="168">£0</text><text x="97" y="168" text-anchor="middle">£2,000</text><text x="186" y="168" text-anchor="middle">£4,000</text><text x="275" y="168" text-anchor="middle">£6,000</text>
+<text x="8" y="16">Admin and finance time</text>
+<rect class="b" x="8" y="22" width="324" height="24" rx="4"/><text class="v" x="326" y="38" text-anchor="end">£7,270</text>
+<text x="8" y="66">Looking for misplaced paperwork</text>
+<rect class="b" x="8" y="72" width="44.2" height="24" rx="4"/><text class="v" x="58" y="88">£991</text>
+<text x="8" y="116">If JobTrack saves you just 1 hour a week</text>
+<rect class="hi" x="8" y="122" width="29.5" height="24" rx="4"/><text class="v" x="43" y="138">£661</text>
+</g>
+</svg>
+<p class="meth">Estimate. Time valued at the UK National Living Wage, £12.71/h from April 2026 (<a href="https://www.gov.uk/national-minimum-wage-rates" rel="noopener">gov.uk</a>). Admin time covers all admin, not just job tickets. Your figures will differ.</p>
+</section>
+
+<section aria-labelledby="benefits">
+<p class="label">Benefits</p>
+<h2 id="benefits">Why use it</h2>
+<ul class="ben">
+<li><b>No more lost tickets.</b> Every job is recorded with a reference and due date.</li>
+<li><b>See the counter at a glance.</b> What is due, in progress or ready.</li>
+<li><b>Find any job in seconds.</b> Search by name, phone or reference.</li>
+<li><b>Money in pounds.</b> Prices, amount paid and balance are recorded for each job.</li>
+<li><b>Itemised receipts.</b> Print with a QR code that opens the order (on SUNMI).</li>
+<li><b>Works without internet.</b> The core workflow needs no connection.</li>
+<li><b>Encrypted on the device.</b> Customer data is encrypted where it is stored.</li>
+<li><b>Backups you control.</b> Encrypted, exported by you, restored when you need them.</li>
+<li><b>Free to start.</b> Free download, no subscription needed to begin.</li>
+<li><b>Runs on what you have.</b> A SUNMI counter device or any Android 7+ phone or tablet.</li>
+</ul>
 </section>
 
 <section aria-labelledby="install">
@@ -158,5 +297,22 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;font:.75rem/1.6 var(--m
 </div>
 </main>
 <footer><div class="wrap">&copy; 2026 Shadhab Technology</div></footer>
+<script>
+// Scrub: each .scene gets --p (0..1). No JS or reduced motion = no "s" class = static sections.
+(function(){
+  var d=document.documentElement,S=[].slice.call(document.querySelectorAll('.scene')),q=0;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  d.className='s';
+  function f(){
+    q=0;var h=innerHeight,r=S.map(function(e){return e.getBoundingClientRect()}); // read all
+    S.forEach(function(e,i){ // then write
+      var p=Math.min(1,Math.max(0,-r[i].top/(r[i].height-h))).toFixed(3);
+      if(e._p!==p){e._p=p;e.style.setProperty('--p',p)}
+    });
+  }
+  function u(){q||(q=requestAnimationFrame(f))}
+  addEventListener('scroll',u,{passive:true});addEventListener('resize',u);f();
+})();
+</script>
 </body>
 </html>
